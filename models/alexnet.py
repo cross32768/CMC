@@ -5,9 +5,9 @@ import torch.nn as nn
 
 
 class MyAlexNetCMC(nn.Module):
-    def __init__(self, feat_dim=128):
+    def __init__(self, feat_dim=128, split=[1, 2]):
         super(MyAlexNetCMC, self).__init__()
-        self.encoder = alexnet(feat_dim=feat_dim)
+        self.encoder = alexnet(feat_dim=feat_dim, split=split)
         self.encoder = nn.DataParallel(self.encoder)
 
     def forward(self, x, layer=8):
@@ -15,14 +15,15 @@ class MyAlexNetCMC(nn.Module):
 
 
 class alexnet(nn.Module):
-    def __init__(self, feat_dim=128):
+    def __init__(self, feat_dim=128, split=[1, 2]):
         super(alexnet, self).__init__()
 
         self.l_to_ab = alexnet_half(in_channel=1, feat_dim=feat_dim)
         self.ab_to_l = alexnet_half(in_channel=2, feat_dim=feat_dim)
+        self.split = split
 
     def forward(self, x, layer=8):
-        l, ab = torch.split(x, [1, 2], dim=1)
+        l, ab = torch.split(x, self.split, dim=1)
         feat_l = self.l_to_ab(l, layer)
         feat_ab = self.ab_to_l(ab, layer)
         return feat_l, feat_ab
