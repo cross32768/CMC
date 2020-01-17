@@ -166,7 +166,7 @@ def get_train_loader(args):
 def set_model(args, n_data):
     # set the model
     if args.model == 'alexnet':
-        model = MyAlexNetCMC(args.feat_dim)
+        model = MyAlexNetCMC(args.feat_dim, split=[3, 3])
     elif args.model.startswith('resnet'):
         model = MyResNetsCMC(args.model)
     else:
