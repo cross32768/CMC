@@ -18,8 +18,8 @@ class alexnet(nn.Module):
     def __init__(self, feat_dim=128, split=[1, 2]):
         super(alexnet, self).__init__()
 
-        self.l_to_ab = alexnet_half(in_channel=1, feat_dim=feat_dim)
-        self.ab_to_l = alexnet_half(in_channel=2, feat_dim=feat_dim)
+        self.l_to_ab = alexnet_half(in_channel=split[0], feat_dim=feat_dim)
+        self.ab_to_l = alexnet_half(in_channel=split[1], feat_dim=feat_dim)
         self.split = split
 
     def forward(self, x, layer=8):
