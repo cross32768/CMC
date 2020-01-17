@@ -7,6 +7,41 @@ import torch
 import torchvision.datasets as datasets
 
 
+class MultiViewDataset(datasets.ImageFolder):
+    def __init__(self, root, transform=None, target_transform=None, two_crop=False):
+        super(MultiViewDataset, self).__init__(root, transform, target_transform)
+        self.two_crop = two_crop
+        self.camera1_file_paths = \
+            self._get_file_paths(camera_index=1)
+        self.camera2_file_paths = \
+            self._get_file_paths(camera_index=2)
+
+    def __getitem__(self, index):
+        camera1_img = Image.open(self.camera1_file_paths[index])
+        camera2_img = Image.open(self.camera2_file_paths[index])
+
+        if self.transform is not None:
+            camera1_img = self.transform(camera1_img)
+            camera2_img = self.transform(camera2_img)
+        
+        if self.target_transform is not None:
+            raise NotImplementedError
+            
+        if self.two_crop:
+            raise NotImplementedError
+        img = torch.cat([camera1_img, camera2_img], dim=0)
+        target = None
+        return img, target, index
+
+    def __len__(self):
+        return len(self.camera1_file_paths)
+
+    def _get_file_paths(self, camera_index):
+        p = Path(self.data_dir)
+        paths = p.glob('*/*_{}.jpg'.format(camera_index))
+        return sorted(list(paths))
+
+
 class ImageFolderInstance(datasets.ImageFolder):
     """Folder datasets which returns the index of the image as well
     """
