@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+from pathlib import Path
 import numpy as np
 from skimage import color
 
@@ -37,7 +38,7 @@ class MultiViewDataset(datasets.ImageFolder):
         return len(self.camera1_file_paths)
 
     def _get_file_paths(self, camera_index):
-        p = Path(self.data_dir)
+        p = Path(self.root)
         paths = p.glob('*/*_{}.jpg'.format(camera_index))
         return sorted(list(paths))
 
