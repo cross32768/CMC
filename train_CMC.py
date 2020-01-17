@@ -23,7 +23,7 @@ from NCE.NCEAverage import NCEAverage
 from NCE.NCECriterion import NCECriterion
 from NCE.NCECriterion import NCESoftmaxLoss
 
-from dataset import ImageFolderInstance
+from dataset import ImageFolderInstance, MultiViewDataset
 
 try:
     from apex import amp, optimizers
@@ -147,7 +147,8 @@ def get_train_loader(args):
         transforms.ToTensor(),
         normalize,
     ])
-    train_dataset = ImageFolderInstance(data_folder, transform=train_transform)
+    # train_dataset = ImageFolderInstance(data_folder, transform=train_transform)
+    train_dataset = MultiViewDataset(data_folder, transform=train_transform)
     train_sampler = None
 
     # train loader
