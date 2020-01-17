@@ -126,7 +126,8 @@ def parse_option():
 
 def get_train_loader(args):
     """get the train loader"""
-    data_folder = os.path.join(args.data_folder, 'train')
+    data_folder = args.data_folder
+    # data_folder = os.path.join(args.data_folder, 'train')
 
     if args.view == 'Lab':
         mean = [(0 + 100) / 2, (-86.183 + 98.233) / 2, (-107.857 + 94.478) / 2]

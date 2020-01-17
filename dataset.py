@@ -2,6 +2,7 @@ from __future__ import print_function
 
 from pathlib import Path
 import numpy as np
+from PIL import Image
 from skimage import color
 
 import torch
@@ -31,7 +32,7 @@ class MultiViewDataset(datasets.ImageFolder):
         if self.two_crop:
             raise NotImplementedError
         img = torch.cat([camera1_img, camera2_img], dim=0)
-        target = None
+        target = 0
         return img, target, index
 
     def __len__(self):
