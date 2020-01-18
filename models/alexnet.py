@@ -5,18 +5,22 @@ import torch.nn as nn
 
 
 class MyAlexNetCMC(nn.Module):
-    def __init__(self, feat_dim=128, split=[1, 2]):
+    def __init__(self, feat_dim=128, split=[1, 2], shared=False):
         super(MyAlexNetCMC, self).__init__()
-        self.encoder = alexnet(feat_dim=feat_dim, split=split)
+        self.encoder = None
+        if shared:
+            self.encoder = shared_alexnet(feat_dim=feat_dim, split=split)
+        else:
+            self.encoder = alexnet(feat_dim=feat_dim, split=split)
         self.encoder = nn.DataParallel(self.encoder)
 
     def forward(self, x, layer=8):
         return self.encoder(x, layer)
 
 
-class alexnet_shared_param(nn.Module):
+class shared_alexnet(nn.Module):
     def __init__(self, feat_dim=128, split=[1, 2]):
-        super(alexnet, self).__init__()
+        super(shared_alexnet, self).__init__()
         self.embed = alexnet_half(in_channel=split[0], feat_dim=feat_dim)
         self.split = split
 
