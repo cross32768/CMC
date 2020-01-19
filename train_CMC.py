@@ -85,7 +85,7 @@ def parse_option():
     parser.add_argument('--opt_level', type=str, default='O2', choices=['O1', 'O2'])
 
     # data crop threshold
-    parser.add_argument('--crop_low', type=float, default=0.2, help='low area in crop')
+    parser.add_argument('--crop_low', type=float, default=0.5, help='low area in crop')
 
     opt = parser.parse_args()
 
